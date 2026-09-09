@@ -29,17 +29,25 @@ Where commit messages and the diff disagree, trust the diff and flag the disagre
 
 If the branch has no commits ahead of base, or the base cannot be determined, say so and ask rather than guessing.
 
-**Applying the result.** After presenting the output, offer to apply it. If `gh` is available and a PR exists, `gh pr edit --title <title> --body-file <tmpfile>` applies both. If no PR exists, offer `gh pr create --title <title> --body-file <tmpfile>`. Write the body to a temporary file first rather than passing it inline, since the body contains backticks and newlines. Never apply without the user confirming which title they picked.
+**Applying the result.** For draft-only requests, present the output and offer to apply it. When the user has already requested a PR update through `gh`, collect their title choice using the flow below, then apply the selected title and displayed body without asking for a second confirmation. If `gh` is available and a PR exists, `gh pr edit --title <title> --body-file <tmpfile>` applies both. If no PR exists, offer `gh pr create --title <title> --body-file <tmpfile>`. Write the body to a temporary file first rather than passing it inline, since the body contains backticks and newlines. Use an explicitly chosen title as-is without asking the user to select it again.
+
+## Interactive title selection
+
+When the user asks to apply or update the PR directly and has not already chosen a title, use the host's native multiple-choice input tool when available and permitted in the current mode. In Claude Code, use `AskUserQuestion`. In Codex, prefer `request_user_input_async`, or use `request_user_input` when its tool instructions permit it. This prompt collects a title preference for an already authorized update, not permission to perform a new action.
+
+First show the proposed body in its fenced markdown block and the review flags so the user can review what will be applied. Then invoke the input tool with one single-select question, such as "Which title should I use for this PR update?", and two or three title options following `references/titles.md`. Put the recommended option first and mark it as recommended. Show each exact title and its one-line reason in the option fields supported by the tool. If labels must be short, use distinct short labels and put the full title in each option's description. Keep recommendation markers out of the actual PR title. Allow a custom title through the tool's free-text input when supported.
+
+Wait for the user's submitted choice before running `gh pr edit`. A preselected default, an empty response, or elapsed time is not a selection. If the user asks for revisions, make them before applying. If no permitted multiple-choice tool is available, show the title options as text and ask for their choice instead. Do not simulate a picker with a Markdown checklist or ask the user to type an option number when a native picker is available.
 
 ## Output shape
 
-Produce three parts in this order.
+For draft-only requests, produce three parts in this order. For a direct PR update that needs a title choice, follow "Interactive title selection" instead, placing the title options in the input prompt after the body and review flags.
 
 1. **Title options.** Two or three Conventional Commits titles, each with a one-line reason to pick it, then a recommendation. See `references/titles.md` for the rules.
 2. **Body.** A single fenced ```markdown block the user can paste directly. Follow the template below exactly.
 3. **Review flags.** Two to four short paragraphs, outside the code block, naming what a reviewer will push on. See "Review flags" below.
 
-Start with the title options, not with preamble. Do not explain the formatting rules to the user.
+For draft-only requests, start with the title options, not with preamble. Do not explain the formatting rules to the user.
 
 ## Body template
 
