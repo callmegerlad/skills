@@ -12,19 +12,19 @@ Write an issue that explains what users experience and gives maintainers enough 
 - Establish the repository and whether the request is draft-only, creation, or an update. Use supplied findings and available code. Read an existing issue before editing it, and check for duplicates before creating one. Do not create additional issues beyond the requested scope.
 - Inspect the repository's issue template and any examples the user supplies. Borrow useful structure without importing unrelated fields or boilerplate. If a mandatory template conflicts with the requested format, explain the conflict before publication.
 - Verify relevant code locations and preserve qualifications that affect the claim. Distinguish reported behavior, source-based inference, and runtime reproduction. Never invent reproduction results, logs, environment details, or deployment impact. Missing runtime validation does not prevent filing a clearly qualified finding.
-- Check available issue types, organization-level issue fields, and labels. Issue fields can exist without a linked project. Read [GitHub fields](references/github-fields.md) when setting metadata through the API.
+- Check available organization-level issue fields and labels. Issue fields can exist without a linked project. Read [GitHub fields](references/github-fields.md) when setting metadata through the API.
 
-## Choose the issue type
+## Choose the kind of work
 
-Use Bug, Feature, or Documentation according to the request. A title prefix, label, and GitHub issue type are separate metadata; keep their meanings consistent without assuming every category is an available type. Set a matching repository-supported type when available. If it is unavailable, use relevant labels and report the type limitation rather than forcing a different classification. Do not create organization-wide types.
+Classify the issue as Bug, Feature, or Documentation according to the request. The kind shapes the body and title prefix. Do not set or change the GitHub issue type; leave it for the user.
 
-| Kind of work | Type guidance | What the description should establish |
-| --- | --- | --- |
-| Bug | Bug | Existing behavior breaks an expectation. Include reproduction steps, expected behavior, and actual behavior. |
-| Feature | Feature | A new capability serves a concrete user need. Include the use case, desired behavior, and current limitation. |
-| Documentation | Documentation if available, otherwise a documentation label | Identify the audience, missing or incorrect information, and what readers need to understand or do. |
+| Kind of work | What the description should establish |
+| --- | --- |
+| Bug | Existing behavior breaks an expectation. Include reproduction steps, expected behavior, and actual behavior. |
+| Feature | A new capability serves a concrete user need. Include the use case, desired behavior, and current limitation. |
+| Documentation | Identify the audience, missing or incorrect information, and what readers need to understand or do. |
 
-Security, performance, accessibility, and design can describe the topic rather than the type. Classify by the actual request: a performance regression can be a Bug, while a new optimization capability can be a Feature. Use relevant labels for these topics.
+Security, performance, accessibility, and design can describe the topic rather than the kind. Classify by the actual request: a performance regression can be a Bug, while a new optimization capability can be a Feature. Use relevant labels for these topics.
 
 ## Body and voice
 
@@ -70,7 +70,7 @@ Omit sections that add no information. When Expected behavior and Actual behavio
 
 For issue creation or a requested title rewrite, obtain the user's title choice before publishing unless they already explicitly chose one. Use the host's native multiple-choice input tool when available and permitted. In Claude Code, use `AskUserQuestion`. In Codex, prefer `request_user_input_async`, or use `request_user_input` when its tool instructions permit it. This collects a title preference for an already authorized operation, not a second publication approval. For body-only or metadata-only updates, preserve the existing title without reopening title selection.
 
-First show the complete proposed body in a fenced Markdown block, with proposed type, priority field, and labels outside it. Then ask one single-select question, such as “Which title should I use for this issue?”, with **exactly three title options**. Make each short, searchable, and specific to the affected behavior or user impact. Give the options meaningfully different emphasis while accurately representing the same issue. Follow repository conventions rather than forcing Conventional Commits syntax. Where prefixes are customary, match the issue kind, for example `[Bug]: Sign-out is undone by a delayed refresh`, `[Feature]: Export filtered cases as CSV`, or `[Documentation]: Explain how to configure SSO`. Offer three alternatives for the chosen kind, not one title from each type.
+First show the complete proposed body in a fenced Markdown block, with proposed priority field and labels outside it. Then ask one single-select question, such as “Which title should I use for this issue?”, with **exactly three title options**. Make each short, searchable, and specific to the affected behavior or user impact. Give the options meaningfully different emphasis while accurately representing the same issue. Follow repository conventions rather than forcing Conventional Commits syntax. Where prefixes are customary, match the issue kind, for example `[Bug]: Sign-out is undone by a delayed refresh`, `[Feature]: Export filtered cases as CSV`, or `[Documentation]: Explain how to configure SSO`. Offer three alternatives for the chosen kind, not one title from each kind.
 
 Put the recommended option first and mark it as recommended. Show each exact title with a one-line reason in the fields supported by the input tool. If option labels must be short, use distinct labels and put the full title and reason in each description. Allow a custom title through free-text input when supported. Keep recommendation markers and explanations out of the published title.
 
@@ -80,9 +80,9 @@ Honor an explicitly chosen title verbatim and apply the prepared result without 
 
 ## Metadata and publication
 
-- Set Bug, Feature, or Documentation when the matching issue type is available. Add relevant labels, preferring existing repository conventions and leaving unrelated metadata intact.
+- Do not set or change the issue type. Add relevant labels, preferring existing repository conventions and leaving unrelated metadata intact.
 - Set priority using **Fields → Priority**, matching the available option names and impact. Do not use a priority label or put priority in the body. High can fit an access/data risk or a major broken workflow; Urgent requires evidence of immediate critical impact. Do not automatically inherit the example issue's severity. If the field is unavailable or permission is denied, report that limitation rather than substituting a label or creating organization-wide fields.
 - Remove a superseded priority label from the target issue when moving priority into its field. Do not delete the repository's label definition. Do not assign owners, milestones, or projects without context supporting the choice.
 - Use the available GitHub connector or `gh`. For CLI publication, write the exact body to a temporary UTF-8 file and use `--body-file`. Keep shell quoting safe. Do not require a particular provider or another writing skill.
-- After creation or editing, read back the issue to verify its title, body, type, field values, and labels. If a write times out or partially fails, inspect the resulting state before retrying so you do not duplicate an issue or overwrite a successful change. Stop blind retries on a persistent permission or capability failure and report what remains unapplied.
+- After creation or editing, read back the issue to verify its title, body, field values, and labels. If a write times out or partially fails, inspect the resulting state before retrying so you do not duplicate an issue or overwrite a successful change. Stop blind retries on a persistent permission or capability failure and report what remains unapplied.
 - Return the issue link and a brief account of applied changes or limitations. Do not claim unsupported metadata was set.

@@ -1,19 +1,16 @@
 # GitHub issue metadata
 
-Read this only when setting issue types or custom fields through GitHub's API. Prefer an available connector that exposes the same capabilities. Discover IDs and option names per repository; never reuse values from another issue or organization.
+Read this only when setting custom fields through GitHub's API. Prefer an available connector that exposes the same capabilities. Discover IDs and option names per repository; never reuse values from another issue or organization.
 
 Useful REST endpoints, relative to `https://api.github.com`:
 
 | Purpose | Method and path |
 | --- | --- |
-| Current issue, type, labels, and field values | `GET /repos/{owner}/{repo}/issues/{number}` |
-| Available issue types | `GET /repos/{owner}/{repo}/issue-types` |
+| Current issue, labels, and field values | `GET /repos/{owner}/{repo}/issues/{number}` |
 | Organization issue fields and options | `GET /orgs/{org}/issue-fields` |
 | Current issue field values | `GET /repos/{owner}/{repo}/issues/{number}/issue-field-values` |
 | Add or update selected field values | `POST /repos/{owner}/{repo}/issues/{number}/issue-field-values` |
 | Remove one field value | `DELETE /repos/{owner}/{repo}/issues/{number}/issue-field-values/{issue_field_id}` |
-
-Set the issue type with `PATCH /repos/{owner}/{repo}/issues/{number}` and a `type` containing an available type name, such as `Bug`.
 
 For Priority, find its field ID and the exact desired option name. Send JSON with this shape, using the discovered ID instead of the example value:
 
