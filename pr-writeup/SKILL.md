@@ -73,11 +73,15 @@ This PR [verb] [what changed and why, in one to three sentences].
 ## Notes
 
 * [Behavioural fact a reviewer needs that is not itself a change]
+
+Fixes #<issue-number>
 ```
 
 The summary is an overview, not a preview of the bullets. It answers three questions in plain language. What problem or need does this PR address, what will someone using or operating the system notice, and what is deliberately out of scope or removed. It should make sense to a teammate who has not opened the diff and does not know the module names. Identifiers belong in the summary only when the identifier is the subject of the whole PR. If the summary could be rebuilt by concatenating the bullets, it is a preview and needs rewriting.
 
-`## Notes` is optional. Include it only when there is a real invariant, behavioural consequence, or deliberate design choice worth stating. Notes are also where small but load-bearing details go when they are too minor to be a Key change but too important to drop, for example a normalisation that preserves existing backend behaviour. Add other `##` headers only when a section of the PR needs its own explanation, for example a controversial removal that deserves a stated rationale. Never add a closing sentence after the last section.
+`## Notes` is optional. Include it only when there is a real invariant, behavioural consequence, or deliberate design choice worth stating. Notes are also where small but load-bearing details go when they are too minor to be a Key change but too important to drop, for example a normalisation that preserves existing backend behaviour. Add other `##` headers only when a section of the PR needs its own explanation, for example a controversial removal that deserves a stated rationale. Do not add a closing summary sentence after the last section. The issue-closing footer below is allowed and required when applicable.
+
+When the PR resolves a targeted GitHub issue, end the body with a standalone `Fixes #<issue-number>` line, for example `Fixes #69` for Issue #69. Put it after all sections, separated by a blank line, inside the copyable body block, without a bullet or backticks. Use the issue identified in the user's request or gathered context, and never invent an issue number. For multiple resolved issues, use one `Fixes` line per issue at the end. Omit the footer when no target issue is known or the PR only partially addresses or merely references an issue.
 
 ## What earns a Key changes line
 
