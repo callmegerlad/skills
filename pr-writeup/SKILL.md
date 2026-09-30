@@ -35,9 +35,20 @@ If the branch has no commits ahead of base, or the base cannot be determined, sa
 
 When the user asks to apply or update the PR directly and has not already chosen a title, use the host's native multiple-choice input tool when available and permitted in the current mode. In Claude Code, use `AskUserQuestion`. In Codex, prefer `request_user_input_async`, or use `request_user_input` when its tool instructions permit it. This prompt collects a title preference for an already authorized update, not permission to perform a new action.
 
-First show the proposed body in its fenced markdown block and the review flags so the user can review what will be applied. Then invoke the input tool with one single-select question, such as "Which title should I use for this PR update?", and two or three title options following `references/titles.md`. Put the recommended option first and mark it as recommended. Show each exact title and its one-line reason in the option fields supported by the tool. If labels must be short, use distinct short labels and put the full title in each option's description. Keep recommendation markers out of the actual PR title. Allow a custom title through the tool's free-text input when supported.
+First show the proposed body in its fenced markdown block and the review flags so the user can review what will be applied. Then invoke the input tool with one single-select question, such as "Which title should I use for this PR update?", and two or three title options following `references/titles.md`. Put the recommended option first and append ` (Recommended)` to its displayed label.
 
-Wait for the user's submitted choice before running `gh pr edit`. A preselected default, an empty response, or elapsed time is not a selection. If the user asks for revisions, make them before applying. If no permitted multiple-choice tool is available, show the title options as text and ask for their choice instead. Do not simulate a picker with a Markdown checklist or ask the user to type an option number when a native picker is available.
+Each suggestion's heading (`label` or equivalent) must be the complete proposed PR title, including its Conventional Commits prefix. Its subtitle (`description` or equivalent) briefly helps the user choose that wording: explain a meaningful difference in scope or emphasis, why it is recommended, or when an alternative fits better. Use natural language tailored to the change, without a fixed sentence pattern or generic praise about being clear or searchable. Do not replace the heading with a summary or repeat the PR title in the subtitle. For `AskUserQuestion`, set each `questions[].options[].label` to the full PR title, plus the recommendation marker when applicable, and `questions[].options[].description` to the explanation only. For example, one option object is:
+
+```json
+{
+  "label": "fix(download): resume interrupted downloads (Recommended)",
+  "description": "Puts the user-visible recovery in release notes. A title about retry handling would be more useful if this change only affected the internal client."
+}
+```
+
+Prefer an input tool that supports full PR titles as option headings. If the tool accepts only option strings, use the exact titles as those strings and show the reasons separately before the question. If a tool's label limits prevent full titles, use the text fallback below instead of moving titles into subtitles. Allow a custom title through free-text input when supported. Keep recommendation markers and explanations out of the published title.
+
+Wait for the user's submitted choice before running `gh pr edit`. A preselected default, an empty response, or elapsed time is not a selection. If the user asks for revisions, make them before applying. If no permitted multiple-choice tool supports full titles as option headings, show the title options as text and ask for their choice instead. Do not simulate a picker with a Markdown checklist or ask the user to type an option number when a suitable native picker is available.
 
 ## Output shape
 
